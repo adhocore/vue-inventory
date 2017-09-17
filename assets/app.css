@@ -1,0 +1,179 @@
+/**
+ * @author Jitendra Adhikari <jiten.adhikary at gmail dot com>
+ */
+.bg-gray {
+  background: #EEEEEE;
+}
+.bg-dark-gray {
+  background: #F5F6F1;
+}
+.bg-dark-gray.row, .bg-light-gray.row {
+  padding: 5px 0;
+  border: 1px solid #DCDCDC;
+  border-bottom: none;
+}
+.bg-light-gray {
+  background: #F9F9F9;
+}
+.form-group {
+  margin-bottom: 0px;
+}
+.dotted-bottom {
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: #AAAAAA;
+}
+.full {
+  width: 100%;
+}
+.left-30, .left-70 {
+  float: left;
+  width: 30%;
+}
+.left-70 {
+  width: 70%;
+}
+label.no-bold {
+  font-weight: normal;
+}
+.clear {
+  clear: both;
+}
+.spacer-10 {
+  margin: 0;
+  padding: 0;
+  height: 10px;
+}
+.feedback {
+  margin-left: -50px;
+  margin-top: 5px;
+}
+tr.single {
+  background-color: #C6C78E;
+}
+tr.double {
+  background-color: #CAE6EB;
+}
+.calendar {
+  border: 1px solid #DCDCDC;
+  border-collapse: collapse;
+}
+.calendar-data {
+  overflow-x: hidden;
+}
+.calendar th, .calendar td {
+  text-align: center;
+}
+.calendar th {
+  padding: 0 5px;
+}
+.calendar th.compact {
+  padding: 0;
+}
+.calendar th.cozy {
+  padding: 5px;
+}
+.calendar th.weekday {
+  background-color: #DCDCDC;
+}
+.calendar th.weekend {
+  background-color: #860101;
+  color: #FFFFFF;
+}
+.calendar .title {
+  text-align: left;
+  width: 156px;
+  padding: 0 5px;
+}
+.calendar .title-month {
+  text-align: center;
+  width: 994px;
+}
+.calendar span.month {
+  width: 115px;
+  display: inline-block;
+}
+.calendar .text-left {
+  text-align: left;
+}
+.calendar .value {
+  width: 99px;
+  max-height: 20px;
+}
+.prompt {
+  width: 240px;
+  height: 52px;
+  border: 1px solid #EDEDEB;
+  border-radius: 2px;
+  background: #FFFFFF;
+  padding: 10px;
+  position: absolute;
+}
+.prompt .prompt-input {
+  width: 140px;
+  border: 1px solid #DDD;
+  border-radius: 2px;
+  padding: 5px;
+}
+.prompt button {
+  font-weight: bold;
+}
+.prompt .prompt-input:focus {
+  outline: none;
+  border: 1px solid #66AFE9;
+}
+.prompt-input.error {
+  border: 1px solid #DD5555;
+}
+.prompt .caret {
+  color: #DCDCDC;
+}
+.caret.pointer {
+  cursor: pointer;
+}
+.caret.right, .caret.left {
+  border-bottom: 8px solid transparent;
+  border-top: 8px solid transparent;
+  border-left: 8px solid;
+  display: inline-block;
+  height: 0;
+  vertical-align: middle;
+  width: 0;
+}
+.caret.left {
+  border-right: 8px solid;
+  border-left: none;
+}
+.caret.down {
+  margin-top: 8px;
+}
+.caret.up {
+  margin-top: -8px;
+  margin-left: -12px;
+}
+.scroller {
+  position: relative;
+  bottom: -45px;
+  margin: -8px;
+  left: 996px;
+}
+.scroller.left {
+  left: 980px;
+}
+.border-left {
+  border-left: 1px solid #CCCCCC;
+}
+.border-all {
+  border: 1px solid #CCCCCC;
+}
+.top-less {
+  border-top: none !important;
+}
+.bottom-less {
+  border-bottom: none !important;
+}
+.with-bottom {
+  border-bottom: 1px solid #DCDCDC !important;
+  padding-bottom: 25px !important;
+}

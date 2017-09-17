@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hotel Room Inventory</title>
+  <meta charset="utf-8">
+  <meta name="author" content="Jitendra Adhikari">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div id="app" class="container app">
+<div class="bulk-operation">
+  <form class="form-horizontal" method="POST" v-on:submit.prevent="bulkUpdate">
+    <div class="row bg-dark-gray">
+      <div class="col-md-12">
+        <div class="dotted-bottom">Bulk Operations</div>
+      </div>
+    </div>
+    <div class="row bg-light-gray">
+      <div class="form-group col-md-4">
+        <div class="col-md-4">
+          <label for="room-type">Select Room:</label>
+        </div>
+        <div class="col-md-6">
+          <select v-model="roomType" class="form-control input-sm" id="room-type">
+            <option v-for="(typeDetail, roomType) in roomTypes" :value="roomType" :inventory="typeDetail.inventory">
+              [[ typeDetail.label ]]
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-dark-gray">
+      <div class="form-group">
+        <div class="col-md-4">
+          <div class="col-md-4">
+            <label>Select Days:</label>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-2">
+                <label class="no-bold" for="from-date">From:</label>
+              </div>
+              <div class="col-md-10">
+                <input class="form-control input-sm" v-model="fromDate" type="date" name="from-date" id="from-date" required placeholder="YYYY-MM-DD" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <label class="no-bold" for="to-date">To:</label>
+              </div>
+              <div class="col-md-10">
+                <input class="form-control input-sm" v-model="toDate" type="date" name="to-date" id="to-date" required placeholder="YYYY-MM-DD" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="row">
+            <div class="col-md-2">
+              <label class="no-bold">Refine Days:</label>
+            </div>
+            <div class="col-md-10">
+            <template v-for="(day, pos) in refineDays">
+              <div :class="'col-md-3 ' + (pos == 7 ? 'clear' : '')">
+                <input type="checkbox" v-model="filterDays" :value="day.value" :id="'refine-day-' + pos" />
+                <label class="no-bold" :for="'refine-day-' + pos">[[ day.label ]]</label>
+              </div>
+            </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-light-gray">
+      <div class="form-group col-md-5">
+        <div class="col-md-5">
+          <label for="bulk-price">Change Price To:</label>
+        </div>
+        <div class="col-md-7">
+          <input class="form-control input-sm" v-model="bulkPrice" type="number" min="0" id="bulk-price" required />
+        </div>
+      </div>
+    </div>
+    <div class="row bg-light-gray top-less">
+      <div class="form-group col-md-5">
+        <div class="col-md-5">
+          <label for="bulk-quota">Change Availability To:</label>
+        </div>
+        <div class="col-md-7">
+          <input class="form-control input-sm" v-model="bulkQuota" type="number" id="bulk-quota" min="0" :max="roomTypes[roomType].inventory" required />
+        </div>
+      </div>
+    </div>
+    <div class="row bg-dark-gray with-bottom">
+      <div class="col-md-2">
+        <button type="button" class="btn btn-sm btn-default" v-on:click="cancel">Cancel</button>
+        <button type="submit" class="btn btn-sm btn-success">Update</button>
+      </div>
+      <div class="col-md-10 feedback">
+        <span v-show="errors" class="text-danger">[[ errors ]]</span>
+        <span v-show="saved" class="text-success">Saved</span>
+      </div>
+    </div>
+    <div class="spacer-10">&nbsp;</div>
+  </form>
+</div>
+<div class="spacer-10">&nbsp;</div>
+<calendar :room-types="roomTypes" :storage="storage" ref="calendar"></calendar>
+</div>
+<script type="text/x-template" id="calendar-grid">
+<div class="row calendar">
+  <div class="calendar-head">
+    <table class="full">
+      <thead>
+        <tr class="title-main">
+          <th class="bottom-less bg-dark-gray cozy">
+            <div class="title">Price and Availability</div>
+          </th>
+          <th class="bg-gray border-left cozy">
+            <div class="title-month">
+              <span class="caret pointer down" v-on:click="subMonth"></span>
+              <span class="dropup"><span class="caret pointer up" v-on:click="addMonth"></span></span>
+              <span class="month">[[ month ]] [[ year ]]</span>
+              <span class="caret pointer left" v-on:click="subYear"></span>
+              <span class="caret pointer right" v-on:click="addYear"></span>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <span class="caret pointer left pull-right scroller" v-on:click="scrollLeft"></span>
+            <span class="caret pointer right pull-right scroller" v-on:click="scrollRight"></span>
+          </td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="calendar-data scrollable" id="calendar-data">
+    <table>
+      <thead>
+        <tr>
+          <th class="bg-dark-gray"><p class="title">&nbsp;</p></th>
+          <th v-for="day in daysOfWeek" :class="'compact border-left ' + day.type">[[ day.name ]]</th>
+        </tr>
+        <tr>
+          <th class="bg-dark-gray"><p class="title">&nbsp;</p></th>
+          <td v-for="day in daysOfMonth" class="bg-gray border-left">[[ day.day ]]</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><prompt ref="prompt" :storage="storage"></prompt></td></tr>
+        <template v-for="(typeDetail, roomType) in roomTypes">
+          <tr :class="roomType">
+            <th :colspan="totalDays + 1" class="text-left cozy">[[ typeDetail.label ]]</th>
+          </tr>
+          <tr>
+            <td class="bottom-less bg-dark-gray">
+              <p class="title">Rooms available</p>
+            </td>
+            <td v-for="(data, fullDate) in monthlyData" class="bg-dark-gray border-all">
+              <div class="value">
+                <span class="dotted-bottom" v-on:click="showPrompt" :data-value="data[roomType].quota"
+                  data-prop="quota" :data-room-type="roomType" :data-full-date="fullDate"
+                  :data-max="roomTypes[roomType].inventory">
+                  [[ data[roomType].quota ]]
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="top-less bg-dark-gray">
+              <p class="title">Price</p>
+            </td>
+            <td v-for="(data, fullDate) in monthlyData" class="border-all">
+              <div class="value">
+                <span class="dotted-bottom" v-on:click="showPrompt" :data-value="data[roomType].price"
+                  data-prop="price" :data-room-type="roomType" :data-full-date="fullDate">
+                  [[ data[roomType].price ]]
+                </span>
+                <span>[[ data[roomType].currency ]]</span>
+              </div>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+</div>
+</script>
+<script type="text/x-template" id="prompt">
+  <div class="prompt clear" v-show="opened">
+    <input :class="'prompt-input ' + (error ? 'error' : '')" min="0" :max="data.max" type="number" :value="newValue" v-model="newValue" />
+    <button type="submit" class="btn btn-sm btn-info" v-on:click="update">&#10004;</button>
+    <button type="button" class="btn btn-sm btn-default" v-on:click="close">&times;</button>
+    <span class="caret"></span>
+  </div>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
