@@ -2,7 +2,8 @@
 
 - a vuejs calendar app for managing hotel inventory in bulk or per day basis
 - saves data in client side (web browser) using `localStorage`
-
+- `Store` class can be easily extended to persist in server side (backend)
+- offline capable ;)
 
 # components used
 

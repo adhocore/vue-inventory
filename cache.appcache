@@ -1,0 +1,18 @@
+CACHE MANIFEST
+
+# Offline ability ;)
+
+# Main page
+index.html
+
+# CSS
+https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css
+assets/app.css
+
+# JavaScript
+https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js
+https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js
+assets/app.js
+
+NETWORK:
+*
